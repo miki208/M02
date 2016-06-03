@@ -1,11 +1,13 @@
 package M02;
 
+import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+import java.util.Scanner;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -40,7 +42,7 @@ public class Main {
 	
 	public static void main(String[] args)
 	{
-		DatabaseUtils.createConnection("com.ibm.db2.jcc.DB2Driver", db_login.db_url, db_login.username, db_login.password);
+		con = DatabaseUtils.createConnection("com.ibm.db2.jcc.DB2Driver", db_login.db_url, db_login.username, db_login.password);
 		Main.ref = new Main();
 		Main.ref.createGui();
 	}
@@ -65,7 +67,13 @@ public class Main {
 		
 		M2P4 = ref.createPanelP4();
 		
-		mainPanel = M2P2;
+		mainPanel = new JPanel(new CardLayout());
+		mainPanel.add(M2P1, P1);
+		mainPanel.add(M2P2, P2);
+		mainPanel.add(M2P3, P3);
+		mainPanel.add(M2P4, P4);
+		((CardLayout) mainPanel.getLayout()).show(mainPanel, P1);
+		
 		cont.add(mainPanel);
 		
 		controlPanel = ref.createControlPanel();
@@ -98,6 +106,41 @@ public class Main {
 		layout.putConstraint(SpringLayout.NORTH, findIndexBtn, 20, SpringLayout.SOUTH, indexTf);
 		layout.putConstraint(SpringLayout.WEST, findIndexBtn, 10, SpringLayout.EAST, label);
 		
+		findIndexBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try
+				{
+					Scanner sc = new Scanner(indexTf.getText());
+					if(sc.hasNextInt())
+					{
+						PreparedStatement stmt = con.prepareStatement(selectSql);
+						stmt.setInt(1, sc.nextInt());
+						ResultSet result = stmt.executeQuery();
+						if(!result.next())
+							JOptionPane.showMessageDialog(null, "Student sa navedenim indeksom\nne postoji na master studijama.");
+						else
+						{
+							((CardLayout) mainPanel.getLayout()).show(mainPanel, P2);
+							controlPanel.setVisible(true);
+						}
+						result.close();
+						stmt.close();
+					}
+					sc.close();
+				}
+				catch(SQLException e1)
+				{
+					DatabaseUtils.errorHandler(e1);
+				}
+				catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+				
 		return panel;
 	}
 	
@@ -131,9 +174,36 @@ public class Main {
 		layout.putConstraint(SpringLayout.NORTH, prosekDataTf, 15, SpringLayout.SOUTH, indexDataTf);
 		layout.putConstraint(SpringLayout.WEST, prosekDataTf, 75, SpringLayout.EAST, labelIndex);
 		
+		idSmeraDataModel = new Vector<>();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet result = stmt.executeQuery(
+					  "SELECT	id_smera "
+					+ "FROM		smer s "
+					+ "	JOIN		nivo_kvalifikacije nk "
+					+ "	ON 		nk.id_nivoa = s.id_nivoa "
+					+ "WHERE	nk.naziv = 'Master akademske studije' "
+					+ "ORDER BY id_smera");
+			
+			while(result.next())
+			{
+				int id_smera = result.getInt(1);
+				idSmeraDataModel.add(id_smera);
+			}
+			
+			result.close();
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			DatabaseUtils.errorHandler(e);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		idSmeraDataCb = new JComboBox<>();
+		idSmeraDataCb = new JComboBox<>(idSmeraDataModel);
 		idSmeraDataBtn = new JButton("izmeni");
+		idSmeraDataBtn.setVisible(false);
 		idSmeraDataCb.setEditable(false);
 		ref.setupDataLine(layout, panel, idSmeraDataCb, idSmeraDataBtn, prosekDataTf, labelIndex, "id smera: ");
 		
@@ -152,6 +222,7 @@ public class Main {
 		polDataModel.add("žensko");
 		polDataCb = new JComboBox<>(polDataModel);
 		polDataBtn = new JButton("izmeni");
+		polDataBtn.setVisible(false);
 		polDataCb.setEditable(false);
 		ref.setupDataLine(layout, panel, polDataCb, polDataBtn, prezimeDataTf, labelIndex, "pol: ");
 		
@@ -289,7 +360,6 @@ public class Main {
 		updateBtn = new JButton("ažuriraj");
 		nextBtn = new JButton("sledeća");
 		prevBtn.setEnabled(false);
-		updateBtn.setEnabled(false);
 		
 		panel.add(prevBtn);
 		panel.add(nextBtn);
@@ -329,6 +399,40 @@ public class Main {
 	}
 	
 	public static Connection con = null;
+	public static String selectSql = 
+			  "SELECT	indeks, "
+			+ "			d.id_smera, "
+			+ "			ime, "
+			+ "			prezime, "
+			+ "			pol, "
+			+ "			jmbg, "
+			+ "			datum_rodjenja, "
+			+ "			mesto_rodjenja, "
+			+ "			drzava_rodjenja, "
+			+ "			ime_oca, "
+			+ "			ime_majke, "
+			+ "			ulica_stanovanja, "
+			+ "			kucni_broj, "
+			+ "			mesto_stanovanja, "
+			+ "			postanski_broj, "
+			+ "			drzava_stanovanja, "
+			+ "			telefon, "
+			+ "			mobilni_telefon, "
+			+ "			email, "
+			+ "			\"www uri\", "
+			+ "			datum_upisa "
+			+ "FROM		dosije d "
+			+ "	JOIN	smer s "
+			+ "		ON	s.id_smera = d.id_smera "
+			+ "	JOIN	nivo_kvalifikacije nk "
+			+ "		ON	nk.id_nivoa = s.id_nivoa "
+			+ "WHERE	indeks = ? "
+			+ "	AND		nk.naziv = 'Master akademske studije'";
+	
+	public final static String P1 = "P1";
+	public final static String P2 = "P2";
+	public final static String P3 = "P3";
+	public final static String P4 = "P4";
 	
 	public static Main ref;
 	private JFrame mainWindow;
