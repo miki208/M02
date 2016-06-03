@@ -634,7 +634,10 @@ public class Main {
 				{
 					((JButton) e.getSource()).setText("sačuvaj");
 					if(comp.getClass() == JTextField.class)
+					{
 						((JTextField) comp).setEditable(true);
+						((JTextField) comp).requestFocus();
+					}
 					toUpdate++;
 				}
 				else
