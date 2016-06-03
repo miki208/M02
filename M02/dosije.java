@@ -2,26 +2,26 @@ package M02;
 
 public class dosije
 {
-	double prosek;
-	int indeks;
-	int id_smera;
-	java.lang.String ime;
-	java.lang.String prezime;
-	java.lang.String pol;
-	java.lang.String jmbg;
-	java.sql.Date datum_rodjenja;
-	java.lang.String mesto_rodjenja;
-	java.lang.String drzava_rodjenja;
-	java.lang.String ime_oca;
-	java.lang.String ime_majke;
-	java.lang.String ulica_stanovanja;
-	java.lang.String kucni_broj;
-	java.lang.String mesto_stanovanja;
-	java.lang.String postanski_broj;
-	java.lang.String drzava_stanovanja;
-	java.lang.String telefon;
-	java.lang.String mobilni_telefon;
-	java.lang.String email;
-	java.lang.String www_uri;
-	java.sql.Date datum_upisa;
+	static double prosek;
+	static int indeks;
+	static int id_smera;
+	static java.lang.String ime;
+	static java.lang.String prezime;
+	static java.lang.String pol;
+	static java.lang.String jmbg;
+	static java.sql.Date datum_rodjenja;
+	static java.lang.String mesto_rodjenja;
+	static java.lang.String drzava_rodjenja;
+	static java.lang.String ime_oca;
+	static java.lang.String ime_majke;
+	static java.lang.String ulica_stanovanja;
+	static java.lang.String kucni_broj;
+	static java.lang.String mesto_stanovanja;
+	static java.lang.String postanski_broj;
+	static java.lang.String drzava_stanovanja;
+	static java.lang.String telefon;
+	static java.lang.String mobilni_telefon;
+	static java.lang.String email;
+	static java.lang.String www_uri;
+	static java.sql.Date datum_upisa;
 }
