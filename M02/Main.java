@@ -148,7 +148,7 @@ public class Main {
 							prezimeDataTf.setText(dosije.prezime);
 							
 							dosije.pol = result.getString(5);
-							if(dosije.pol == "m")
+							if(dosije.pol.equals("m"))
 								polDataCb.setSelectedIndex(0);
 							else
 								polDataCb.setSelectedIndex(1);
@@ -570,7 +570,7 @@ public class Main {
 					JOptionPane.showMessageDialog(null, "Postoje nesačuvana polja!");
 				else
 				{
-					//update
+					update();
 				}
 			}
 		});
@@ -667,6 +667,101 @@ public class Main {
 	
 	public void update()
 	{
+		try
+		{
+			PreparedStatement stmt = con.prepareStatement(updateSql);
+			stmt.setInt(1, (Integer) idSmeraDataCb.getSelectedItem());
+			stmt.setString(2, dosije.ime);
+			stmt.setString(3, dosije.prezime);
+			if(((String) polDataCb.getSelectedItem()).equals("muško"))
+				stmt.setString(4, "m");
+			else
+				stmt.setString(4, "z");
+			stmt.setString(5, dosije.jmbg);
+			if(dosije.datum_rodjenja == null)
+				stmt.setNull(6, java.sql.Types.DATE);
+			else
+				stmt.setDate(6, dosije.datum_rodjenja);
+			if(DataValidator.isNull(dosije.mesto_rodjenja))
+				stmt.setNull(7, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(7, dosije.mesto_rodjenja);
+			if(DataValidator.isNull(dosije.drzava_rodjenja))
+				stmt.setNull(8, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(8, dosije.drzava_rodjenja);
+			if(DataValidator.isNull(dosije.ime_oca))
+				stmt.setNull(9, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(9, dosije.ime_oca);
+			if(DataValidator.isNull(dosije.ime_majke))
+				stmt.setNull(10, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(10, dosije.ime_majke);
+			if(DataValidator.isNull(dosije.ulica_stanovanja))
+				stmt.setNull(11, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(11, dosije.ulica_stanovanja);
+			if(DataValidator.isNull(dosije.kucni_broj))
+				stmt.setNull(12, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(12, dosije.kucni_broj);
+			if(DataValidator.isNull(dosije.mesto_stanovanja))
+				stmt.setNull(13, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(13, dosije.mesto_stanovanja);
+			if(DataValidator.isNull(dosije.postanski_broj))
+				stmt.setNull(14, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(14, dosije.postanski_broj);
+			if(DataValidator.isNull(dosije.drzava_stanovanja))
+				stmt.setNull(15, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(15, dosije.drzava_stanovanja);
+			if(DataValidator.isNull(dosije.telefon))
+				stmt.setNull(16, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(16, dosije.telefon);
+			if(DataValidator.isNull(dosije.mobilni_telefon))
+				stmt.setNull(17, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(17, dosije.mobilni_telefon);
+			if(DataValidator.isNull(dosije.email))
+				stmt.setNull(18, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(18, dosije.email);
+			if(DataValidator.isNull(dosije.www_uri))
+				stmt.setNull(19, java.sql.Types.VARCHAR);
+			else
+				stmt.setString(19, dosije.www_uri);
+			stmt.setDate(20, dosije.datum_upisa);
+			stmt.setInt(21, dosije.indeks);
+			int nr = stmt.executeUpdate();
+			if(nr == 1)
+				JOptionPane.showMessageDialog(null, "Podaci studenta su uspešno ažurirani.");
+			else
+				JOptionPane.showMessageDialog(null, "Ažuriranje neuspešno.");
+			stmt.close();
+			reset_panels();
+			((CardLayout) mainPanel.getLayout()).show(mainPanel, P1);
+			currentPanel = P1;
+		}
+		catch(SQLException e)
+		{
+			DatabaseUtils.errorHandler(e);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void reset_panels()
+	{
+		controlPanel.setVisible(false);
+		prevBtn.setEnabled(false);
+		nextBtn.setEnabled(true);
+		indexTf.setText("");
 		
 	}
 	
@@ -708,7 +803,8 @@ public class Main {
 			+ "	AND		nk.naziv = 'Master akademske studije'";
 	public static String updateSql = 
 			  "UPDATE dosije "
-			+ "SET ime = ?, "
+			+ "SET id_smera = ?, "
+			+ "ime = ?, "
 			+ "prezime = ?, "
 			+ "pol = ?, "
 			+ "jmbg = ?, "
