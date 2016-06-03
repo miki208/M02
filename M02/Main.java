@@ -757,10 +757,12 @@ public class Main {
 		catch(SQLException e)
 		{
 			DatabaseUtils.errorHandler(e);
+			DatabaseUtils.rollback(con);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
+			DatabaseUtils.rollback(con);
 		}
 	}
 	
