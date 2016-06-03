@@ -405,7 +405,7 @@ public class Main {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(imeOcaDataBtn.getText() == "izmeni")
+				if(imeOcaDataBtn.getText().equals("izmeni"))
 				{
 					imeOcaDataBtn.setText("sačuvaj");
 					imeOcaDataTf.setEditable(true);
@@ -501,7 +501,7 @@ public class Main {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(urlDataBtn.getText() == "izmeni")
+				if(urlDataBtn.getText().equals("izmeni"))
 				{
 					urlDataBtn.setText("sačuvaj");
 					urlDataTf.setEditable(true);
@@ -630,7 +630,7 @@ public class Main {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(((JButton) e.getSource()).getText() == "izmeni")
+				if(((JButton) e.getSource()).getText().equals("izmeni"))
 				{
 					((JButton) e.getSource()).setText("sačuvaj");
 					if(comp.getClass() == JTextField.class)
@@ -663,6 +663,11 @@ public class Main {
 		a.setPreferredSize(new Dimension(width, heigth));
 		a.setSize(width, heigth);
 		a.setMaximumSize(new Dimension(width, heigth));
+	}
+	
+	public void update()
+	{
+		
 	}
 	
 	public static Connection con = null;
@@ -701,6 +706,28 @@ public class Main {
 			+ "		ON	nk.id_nivoa = s.id_nivoa "
 			+ "WHERE	indeks = ? "
 			+ "	AND		nk.naziv = 'Master akademske studije'";
+	public static String updateSql = 
+			  "UPDATE dosije "
+			+ "SET ime = ?, "
+			+ "prezime = ?, "
+			+ "pol = ?, "
+			+ "jmbg = ?, "
+			+ "datum_rodjenja = ?, "
+			+ "mesto_rodjenja = ?, "
+			+ "drzava_rodjenja = ?, "
+			+ "ime_oca = ?, "
+			+ "ime_majke = ?, "
+			+ "ulica_stanovanja = ?, "
+			+ "kucni_broj = ?, "
+			+ "mesto_stanovanja = ?, "
+			+ "postanski_broj = ?, "
+			+ "drzava_stanovanja = ?, "
+			+ "telefon = ?, "
+			+ "mobilni_telefon = ?, "
+			+ "email = ?, "
+			+ "\"www uri\" = ?, "
+			+ "datum_upisa = ? "
+			+ "WHERE indeks = ?";
 	
 	public final static String P1 = "P1";
 	public final static String P2 = "P2";
@@ -713,62 +740,62 @@ public class Main {
 	public static String currentPanel;
 	public static int toUpdate = 0;
 	
-	private JPanel controlPanel;
-	private JButton prevBtn;
-	private JButton updateBtn;
-	private JButton nextBtn;
+	public static JPanel controlPanel;
+	public static JButton prevBtn;
+	public static JButton updateBtn;
+	public static JButton nextBtn;
 	
-	private JPanel M2P1;
-	private JTextField indexTf;
-	private JButton findIndexBtn;
+	public static JPanel M2P1;
+	public static JTextField indexTf;
+	public static JButton findIndexBtn;
 	
-	private JPanel M2P2;
-	private JTextField indexDataTf;
-	private JTextField prosekDataTf;
-	private JComboBox<Integer> idSmeraDataCb;
-	private JButton idSmeraDataBtn;
-	private JTextField imeDataTf;
-	private JButton imeDataBtn;
-	private JTextField prezimeDataTf;
-	private JButton prezimeDataBtn;
-	private JComboBox<String> polDataCb;
-	private JButton polDataBtn;
-	private JTextField jmbgDataTf;
-	private JButton jmbgDataBtn;
-	private JTextField datRodjDataTf;
-	private JButton datRodjDataBtn;
-	private JTextField mestoRodjDataTf;
-	private JButton mestoRodjDataBtn;
-	private JTextField drzavaRodjDataTf;
-	private JButton drzavaRodjDataBtn;
+	public static JPanel M2P2;
+	public static JTextField indexDataTf;
+	public static JTextField prosekDataTf;
+	public static JComboBox<Integer> idSmeraDataCb;
+	public static JButton idSmeraDataBtn;
+	public static JTextField imeDataTf;
+	public static JButton imeDataBtn;
+	public static JTextField prezimeDataTf;
+	public static JButton prezimeDataBtn;
+	public static JComboBox<String> polDataCb;
+	public static JButton polDataBtn;
+	public static JTextField jmbgDataTf;
+	public static JButton jmbgDataBtn;
+	public static JTextField datRodjDataTf;
+	public static JButton datRodjDataBtn;
+	public static JTextField mestoRodjDataTf;
+	public static JButton mestoRodjDataBtn;
+	public static JTextField drzavaRodjDataTf;
+	public static JButton drzavaRodjDataBtn;
 	
-	private JPanel M2P3;
-	private JTextField imeOcaDataTf;
-	private JButton imeOcaDataBtn;
-	private JTextField imeMajkeDataTf;
-	private JButton imeMajkeDataBtn;
-	private JTextField ulicaDataTf;
-	private JButton ulicaDataBtn;
-	private JTextField kucniBrDataTf;
-	private JButton kucniBrDataBtn;
-	private JTextField mestoStanDataTf;
-	private JButton mestoStanDataBtn;
-	private JTextField postBrDataTf;
-	private JButton postBrDataBtn;
-	private JTextField drzavaStanDataTf;
-	private JButton drzavaStanDataBtn;
-	private JTextField telefonDataTf;
-	private JButton telefonDataBtn;
-	private JTextField mobilniDataTf;
-	private JButton mobilniDataBtn;
-	private JTextField emailDataTf;
-	private JButton emailDataBtn;
+	public static JPanel M2P3;
+	public static JTextField imeOcaDataTf;
+	public static JButton imeOcaDataBtn;
+	public static JTextField imeMajkeDataTf;
+	public static JButton imeMajkeDataBtn;
+	public static JTextField ulicaDataTf;
+	public static JButton ulicaDataBtn;
+	public static JTextField kucniBrDataTf;
+	public static JButton kucniBrDataBtn;
+	public static JTextField mestoStanDataTf;
+	public static JButton mestoStanDataBtn;
+	public static JTextField postBrDataTf;
+	public static JButton postBrDataBtn;
+	public static JTextField drzavaStanDataTf;
+	public static JButton drzavaStanDataBtn;
+	public static JTextField telefonDataTf;
+	public static JButton telefonDataBtn;
+	public static JTextField mobilniDataTf;
+	public static JButton mobilniDataBtn;
+	public static JTextField emailDataTf;
+	public static JButton emailDataBtn;
 	
-	private JPanel M2P4;
-	private JTextField urlDataTf;
-	private JButton urlDataBtn;
-	private JTextField datumUpisaDataTf;
-	private JButton datumUpisaDataBtn;
+	public static JPanel M2P4;
+	public static JTextField urlDataTf;
+	public static JButton urlDataBtn;
+	public static JTextField datumUpisaDataTf;
+	public static JButton datumUpisaDataBtn;
 	
 	Vector<String> polDataModel;
 	Vector<Integer> idSmeraDataModel;
