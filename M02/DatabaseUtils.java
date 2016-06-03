@@ -131,6 +131,7 @@ public class DatabaseUtils
     	}
     	else
     	{
+    		e.printStackTrace();
     		JOptionPane.showMessageDialog(null, "SQL kod: " + e.getErrorCode() + "\nPoruka: " + e.getMessage());
     		System.exit(0);
     	}

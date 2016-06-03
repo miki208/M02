@@ -669,6 +669,7 @@ public class Main {
 	{
 		try
 		{
+			con.setAutoCommit(false);
 			PreparedStatement stmt = con.prepareStatement(updateSql);
 			stmt.setInt(1, (Integer) idSmeraDataCb.getSelectedItem());
 			stmt.setString(2, dosije.ime);
@@ -738,10 +739,17 @@ public class Main {
 			stmt.setInt(21, dosije.indeks);
 			int nr = stmt.executeUpdate();
 			if(nr == 1)
+			{
+				DatabaseUtils.commit(con);
 				JOptionPane.showMessageDialog(null, "Podaci studenta su uspešno ažurirani.");
+			}
 			else
+			{
+				DatabaseUtils.rollback(con);
 				JOptionPane.showMessageDialog(null, "Ažuriranje neuspešno.");
+			}
 			stmt.close();
+			con.setAutoCommit(true);
 			reset_panels();
 			((CardLayout) mainPanel.getLayout()).show(mainPanel, P1);
 			currentPanel = P1;
