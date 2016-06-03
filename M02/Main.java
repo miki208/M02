@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -64,7 +65,7 @@ public class Main {
 		
 		M2P4 = ref.createPanelP4();
 		
-		mainPanel = M2P1;
+		mainPanel = M2P2;
 		cont.add(mainPanel);
 		
 		controlPanel = ref.createControlPanel();
@@ -116,7 +117,7 @@ public class Main {
 		layout.putConstraint(SpringLayout.NORTH, labelIndex, 15, SpringLayout.NORTH, panel);
 		layout.putConstraint(SpringLayout.WEST, labelIndex, 10, SpringLayout.WEST, panel);
 		layout.putConstraint(SpringLayout.NORTH, indexDataTf, 15, SpringLayout.NORTH, panel);
-		layout.putConstraint(SpringLayout.WEST, indexDataTf, 60, SpringLayout.EAST, labelIndex);
+		layout.putConstraint(SpringLayout.WEST, indexDataTf, 75, SpringLayout.EAST, labelIndex);
 		
 		JLabel labelProsek = new JLabel("prosek: ");
 		prosekDataTf = new JTextField();
@@ -128,7 +129,7 @@ public class Main {
 		layout.putConstraint(SpringLayout.NORTH, labelProsek, 15, SpringLayout.SOUTH, indexDataTf);
 		layout.putConstraint(SpringLayout.WEST, labelProsek, 10, SpringLayout.WEST, panel);
 		layout.putConstraint(SpringLayout.NORTH, prosekDataTf, 15, SpringLayout.SOUTH, indexDataTf);
-		layout.putConstraint(SpringLayout.WEST, prosekDataTf, 60, SpringLayout.EAST, labelIndex);
+		layout.putConstraint(SpringLayout.WEST, prosekDataTf, 75, SpringLayout.EAST, labelIndex);
 		
 		
 		idSmeraDataCb = new JComboBox<>();
@@ -146,7 +147,10 @@ public class Main {
 		prezimeDataTf.setEditable(false);
 		ref.setupDataLine(layout, panel, prezimeDataTf, prezimeDataBtn, imeDataTf, labelIndex, "prezime: ");
 		
-		polDataCb = new JComboBox<>();
+		polDataModel = new Vector<>();
+		polDataModel.add("muško");
+		polDataModel.add("žensko");
+		polDataCb = new JComboBox<>(polDataModel);
 		polDataBtn = new JButton("izmeni");
 		polDataCb.setEditable(false);
 		ref.setupDataLine(layout, panel, polDataCb, polDataBtn, prezimeDataTf, labelIndex, "pol: ");
@@ -358,10 +362,6 @@ public class Main {
 	private JButton mestoRodjDataBtn;
 	private JTextField drzavaRodjDataTf;
 	private JButton drzavaRodjDataBtn;
-	private JTextField urlDataTf;
-	private JButton urlDataBtn;
-	private JTextField datumUpisaDataTf;
-	private JButton datumUpisaDataBtn;
 	
 	private JPanel M2P3;
 	private JTextField imeOcaDataTf;
@@ -386,4 +386,11 @@ public class Main {
 	private JButton emailDataBtn;
 	
 	private JPanel M2P4;
+	private JTextField urlDataTf;
+	private JButton urlDataBtn;
+	private JTextField datumUpisaDataTf;
+	private JButton datumUpisaDataBtn;
+	
+	Vector<String> polDataModel;
+	Vector<Integer> idSmeraDataModel;
 }
