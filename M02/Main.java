@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.util.Calendar;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -73,6 +74,7 @@ public class Main {
 		mainPanel.add(M2P3, P3);
 		mainPanel.add(M2P4, P4);
 		((CardLayout) mainPanel.getLayout()).show(mainPanel, P1);
+		currentPanel = P1;
 		
 		cont.add(mainPanel);
 		
@@ -115,15 +117,143 @@ public class Main {
 				{
 					Scanner sc = new Scanner(indexTf.getText());
 					if(sc.hasNextInt())
-					{
+					{	
 						PreparedStatement stmt = con.prepareStatement(selectSql);
-						stmt.setInt(1, sc.nextInt());
+						int index = sc.nextInt();
+						stmt.setInt(1, index);
 						ResultSet result = stmt.executeQuery();
 						if(!result.next())
 							JOptionPane.showMessageDialog(null, "Student sa navedenim indeksom\nne postoji na master studijama.");
 						else
 						{
+							PreparedStatement stmt1 = con.prepareStatement(prosekSql);
+							stmt1.setInt(1, index);
+							ResultSet result1 = stmt1.executeQuery();
+							result1.next();
+							dosije.prosek = result1.getDouble(1);
+							prosekDataTf.setText(Double.toString(Math.round(dosije.prosek * 100) / 100.0));
+							result1.close();
+							stmt1.close();
+							
+							dosije.indeks = result.getInt(1);
+							indexDataTf.setText(Integer.toString(dosije.indeks));
+							
+							dosije.id_smera = result.getInt(2);
+							idSmeraDataCb.setSelectedItem(dosije.id_smera);
+							
+							dosije.ime = result.getString(3);
+							imeDataTf.setText(dosije.ime);
+							
+							dosije.prezime = result.getString(4);
+							prezimeDataTf.setText(dosije.prezime);
+							
+							dosije.pol = result.getString(5);
+							if(dosije.pol == "m")
+								polDataCb.setSelectedIndex(0);
+							else
+								polDataCb.setSelectedIndex(1);
+							
+							dosije.jmbg = result.getString(6);
+							jmbgDataTf.setText(dosije.jmbg);
+							
+							dosije.datum_rodjenja = result.getDate(7);
+							if(!result.wasNull())
+							{
+								Calendar cal = Calendar.getInstance();
+								cal.setTime(dosije.datum_rodjenja);
+								datRodjDataTf.setText(cal.get(Calendar.DATE) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.YEAR));
+							}
+							else
+							{
+								datRodjDataTf.setText("nepoznato");
+							}
+							
+							dosije.mesto_rodjenja = result.getString(8);
+							if(!result.wasNull())
+								mestoRodjDataTf.setText(dosije.mesto_rodjenja);
+							else
+								mestoRodjDataTf.setText("nepoznato");
+							
+							dosije.drzava_rodjenja = result.getString(9);
+							if(!result.wasNull())
+								drzavaRodjDataTf.setText(dosije.drzava_rodjenja);
+							else
+								drzavaRodjDataTf.setText("nepoznato");
+							
+							dosije.ime_oca = result.getString(10);
+							if(!result.wasNull())
+								imeOcaDataTf.setText(dosije.ime_oca);
+							else
+								imeOcaDataTf.setText("nepoznato");
+							
+							dosije.ime_majke = result.getString(11);
+							if(!result.wasNull())
+								imeMajkeDataTf.setText(dosije.ime_majke);
+							else
+								imeMajkeDataTf.setText("nepoznato");
+							
+							dosije.ulica_stanovanja = result.getString(12);
+							if(!result.wasNull())
+								ulicaDataTf.setText(dosije.ulica_stanovanja);
+							else
+								ulicaDataTf.setText("nepoznato");
+							
+							dosije.kucni_broj = result.getString(13);
+							if(!result.wasNull())
+								kucniBrDataTf.setText(dosije.kucni_broj);
+							else
+								kucniBrDataTf.setText("nepoznato");
+							
+							dosije.mesto_stanovanja = result.getString(14);
+							if(!result.wasNull())
+								mestoStanDataTf.setText(dosije.mesto_stanovanja);
+							else
+								mestoStanDataTf.setText("nepoznato");
+							
+							dosije.postanski_broj = result.getString(15);
+							if(!result.wasNull())
+								postBrDataTf.setText(dosije.postanski_broj);
+							else
+								postBrDataTf.setText("nepoznato");
+							
+							dosije.drzava_stanovanja = result.getString(16);
+							if(!result.wasNull())
+								drzavaStanDataTf.setText(dosije.drzava_stanovanja);
+							else
+								drzavaStanDataTf.setText("nepoznato");
+							
+							dosije.telefon = result.getString(17);
+							if(!result.wasNull())
+								telefonDataTf.setText(dosije.telefon);
+							else
+								telefonDataTf.setText("nepoznato");
+							
+							dosije.mobilni_telefon = result.getString(18);
+							if(!result.wasNull())
+								mobilniDataTf.setText(dosije.mobilni_telefon);
+							else
+								mobilniDataTf.setText("nepoznato");
+							
+							dosije.email = result.getString(19);
+							if(!result.wasNull())
+								emailDataTf.setText(dosije.email);
+							else
+								emailDataTf.setText("nepoznato");
+							
+							dosije.www_uri = result.getString(20);
+							if(!result.wasNull())
+								urlDataTf.setText(dosije.www_uri);
+							else
+								urlDataTf.setText("nepoznato");
+							
+							dosije.datum_upisa = result.getDate(21);
+							Calendar cal = Calendar.getInstance();
+							cal.setTime(dosije.datum_upisa);
+							datumUpisaDataTf.setText(cal.get(Calendar.DATE) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.YEAR));
+							
 							((CardLayout) mainPanel.getLayout()).show(mainPanel, P2);
+							currentPanel = P2;
+							prevBtn.setEnabled(false);
 							controlPanel.setVisible(true);
 						}
 						result.close();
@@ -270,6 +400,32 @@ public class Main {
 		layout.putConstraint(SpringLayout.WEST, imeOcaDataTf, 75, SpringLayout.EAST, imeOcaLabel);
 		layout.putConstraint(SpringLayout.NORTH, imeOcaDataBtn, 15, SpringLayout.NORTH, panel);
 		layout.putConstraint(SpringLayout.EAST, imeOcaDataBtn, -10, SpringLayout.EAST, panel);
+		imeOcaDataBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(imeOcaDataBtn.getText() == "izmeni")
+				{
+					imeOcaDataBtn.setText("sačuvaj");
+					imeOcaDataTf.setEditable(true);
+					toUpdate++;
+				}
+				else
+				{
+					if(DataValidator.validate("ime oca: "))
+					{
+						imeOcaDataTf.setEditable(false);
+						imeOcaDataBtn.setText("izmeni");
+						toUpdate--;
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Neispravan unos");
+					}
+				}
+			}
+		});
 		
 		imeMajkeDataTf = new JTextField();
 		imeMajkeDataBtn = new JButton("izmeni");
@@ -279,7 +435,7 @@ public class Main {
 		ulicaDataTf = new JTextField();
 		ulicaDataBtn = new JButton("izmeni");
 		ulicaDataTf.setEditable(false);
-		ref.setupDataLine(layout, panel, ulicaDataTf, ulicaDataBtn, imeMajkeDataTf, imeOcaLabel, "ulica stanovanja:");
+		ref.setupDataLine(layout, panel, ulicaDataTf, ulicaDataBtn, imeMajkeDataTf, imeOcaLabel, "ulica stanovanja: ");
 		
 		kucniBrDataTf = new JTextField();
 		kucniBrDataBtn = new JButton("izmeni");
@@ -340,6 +496,33 @@ public class Main {
 		layout.putConstraint(SpringLayout.WEST, urlDataTf, 75, SpringLayout.EAST, urlLabel);
 		layout.putConstraint(SpringLayout.NORTH, urlDataBtn, 15, SpringLayout.NORTH, panel);
 		layout.putConstraint(SpringLayout.EAST, urlDataBtn, -10, SpringLayout.EAST, panel);
+		urlDataBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(urlDataBtn.getText() == "izmeni")
+				{
+					urlDataBtn.setText("sačuvaj");
+					urlDataTf.setEditable(true);
+					toUpdate++;
+				}
+				else
+				{
+					if(DataValidator.validate("www uri: "))
+					{
+						urlDataTf.setEditable(false);
+						urlDataBtn.setText("izmeni");
+						toUpdate--;
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Neispravan unos");
+					}
+				}
+			}
+		});
+		
 		
 		datumUpisaDataTf = new JTextField();
 		datumUpisaDataBtn = new JButton("izmeni");
@@ -357,8 +540,60 @@ public class Main {
 		panel.setVisible(false);
 		
 		prevBtn = new JButton("prethodna");
+		prevBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				if(currentPanel == P3)
+				{
+					((CardLayout) mainPanel.getLayout()).show(mainPanel, P2);
+					prevBtn.setEnabled(false);
+					currentPanel = P2;
+				}
+				else if(currentPanel == P4)
+				{
+					((CardLayout) mainPanel.getLayout()).show(mainPanel, P3);
+					nextBtn.setEnabled(true);
+					currentPanel = P3;
+				}
+			}
+		});
 		updateBtn = new JButton("ažuriraj");
+		updateBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(toUpdate != 0)
+					JOptionPane.showMessageDialog(null, "Postoje nesačuvana polja!");
+				else
+				{
+					//update
+				}
+			}
+		});
 		nextBtn = new JButton("sledeća");
+		nextBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(currentPanel == P2)
+				{
+					((CardLayout) mainPanel.getLayout()).show(mainPanel, P3);
+					prevBtn.setEnabled(true);
+					currentPanel = P3;
+				}
+				else if(currentPanel == P3)
+				{
+					((CardLayout) mainPanel.getLayout()).show(mainPanel, P4);
+					nextBtn.setEnabled(false);
+					currentPanel = P4;
+				}
+			}
+		});
 		prevBtn.setEnabled(false);
 		
 		panel.add(prevBtn);
@@ -389,6 +624,35 @@ public class Main {
 		layout.putConstraint(SpringLayout.WEST, comp, 75, SpringLayout.EAST, position1);
 		layout.putConstraint(SpringLayout.NORTH, btn, 15, SpringLayout.SOUTH, position);
 		layout.putConstraint(SpringLayout.EAST, btn, -10, SpringLayout.EAST, panel);
+		
+		btn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(((JButton) e.getSource()).getText() == "izmeni")
+				{
+					((JButton) e.getSource()).setText("sačuvaj");
+					if(comp.getClass() == JTextField.class)
+						((JTextField) comp).setEditable(true);
+					toUpdate++;
+				}
+				else
+				{
+					if(DataValidator.validate(name))
+					{
+						((JButton) e.getSource()).setText("izmeni");
+						if(comp.getClass() == JTextField.class)
+							((JTextField) comp).setEditable(false);
+						toUpdate--;
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Neispravan unos!");
+					}
+				}
+			}
+		});
 	}
 	
 	public void setSize(Component a, int width, int heigth)
@@ -399,27 +663,33 @@ public class Main {
 	}
 	
 	public static Connection con = null;
+	public static String prosekSql = 
+			  "SELECT	COALESCE(AVG(1.0 * ocena), 0) AS prosek "
+			+ "FROM		ispit i "
+			+ "WHERE	indeks = ? "
+			+ "	AND		ocena > 5 "
+			+ " AND		status_prijave = 'o' ";
 	public static String selectSql = 
 			  "SELECT	indeks, "
 			+ "			d.id_smera, "
-			+ "			ime, "
-			+ "			prezime, "
+			+ "			TRIM(ime), "
+			+ "			TRIM(prezime), "
 			+ "			pol, "
 			+ "			jmbg, "
 			+ "			datum_rodjenja, "
-			+ "			mesto_rodjenja, "
-			+ "			drzava_rodjenja, "
-			+ "			ime_oca, "
-			+ "			ime_majke, "
-			+ "			ulica_stanovanja, "
+			+ "			TRIM(mesto_rodjenja), "
+			+ "			TRIM(drzava_rodjenja), "
+			+ "			TRIM(ime_oca), "
+			+ "			TRIM(ime_majke), "
+			+ "			TRIM(ulica_stanovanja), "
 			+ "			kucni_broj, "
-			+ "			mesto_stanovanja, "
+			+ "			TRIM(mesto_stanovanja), "
 			+ "			postanski_broj, "
-			+ "			drzava_stanovanja, "
+			+ "			TRIM(drzava_stanovanja), "
 			+ "			telefon, "
 			+ "			mobilni_telefon, "
-			+ "			email, "
-			+ "			\"www uri\", "
+			+ "			TRIM(email), "
+			+ "			TRIM(\"www uri\"), "
 			+ "			datum_upisa "
 			+ "FROM		dosije d "
 			+ "	JOIN	smer s "
@@ -437,6 +707,8 @@ public class Main {
 	public static Main ref;
 	private JFrame mainWindow;
 	private JPanel mainPanel;
+	public static String currentPanel;
+	public static int toUpdate = 0;
 	
 	private JPanel controlPanel;
 	private JButton prevBtn;

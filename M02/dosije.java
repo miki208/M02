@@ -24,4 +24,5 @@ public class dosije
 	static java.lang.String email;
 	static java.lang.String www_uri;
 	static java.sql.Date datum_upisa;
+	
 }
