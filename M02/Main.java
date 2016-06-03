@@ -1,20 +1,21 @@
 package M02;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Panel;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.Spring;
 import javax.swing.SpringLayout;
+
 
 /*
  * Miloš Samardžija 304/2013
@@ -23,11 +24,27 @@ import javax.swing.SpringLayout;
 
 public class Main {
 	
+	static
+	{
+		Runtime.getRuntime().addShutdownHook(new Thread()
+		{
+		    @Override
+		    public void run()
+		    {
+		        DatabaseUtils.close(con);
+		    }
+		});
+		
+	}
+	
 	public static void main(String[] args)
 	{
+		DatabaseUtils.createConnection("com.ibm.db2.jcc.DB2Driver", db_login.db_url, db_login.username, db_login.password);
 		Main.ref = new Main();
 		Main.ref.createGui();
 	}
+	
+	
 	
 	public void createGui()
 	{
@@ -306,6 +323,8 @@ public class Main {
 		a.setSize(width, heigth);
 		a.setMaximumSize(new Dimension(width, heigth));
 	}
+	
+	public static Connection con = null;
 	
 	public static Main ref;
 	private JFrame mainWindow;
