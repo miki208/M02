@@ -4,20 +4,22 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+//dodati validaciju za ime, prezime, drzavu (pocetno veliko slovo), broj telefona - (eventualno /)
+
 public class DataValidator {
 	public static boolean validate(String name)
 	{
 		switch(name)
 		{
 			case "ime: ":
-				if(isSizeCorrect(Main.imeDataTf.getText(), 1, 25) && !isNull(Main.imeDataTf.getText()))
+				if(isSizeCorrect(Main.imeDataTf.getText(), 1, 25) && !isNull(Main.imeDataTf.getText()) && Character.isUpperCase(Main.imeDataTf.getText().charAt(0)))
 				{
 					dosije.ime = Main.imeDataTf.getText();
 					return true;
 				}
 				return false;
 			case "prezime: ":
-				if(isSizeCorrect(Main.prezimeDataTf.getText(), 1, 25) && !isNull(Main.prezimeDataTf.getText()))
+				if(isSizeCorrect(Main.prezimeDataTf.getText(), 1, 25) && !isNull(Main.prezimeDataTf.getText()) && Character.isUpperCase(Main.prezimeDataTf.getText().charAt(0)))
 				{
 					dosije.prezime = Main.prezimeDataTf.getText();
 					return true;
@@ -44,28 +46,28 @@ public class DataValidator {
 				}
 				return false;
 			case "mesto rođenja: ":
-				if(isSizeCorrect(Main.mestoRodjDataTf.getText(), 1, 100) || isNull(Main.mestoRodjDataTf.getText()))
+				if((isSizeCorrect(Main.mestoRodjDataTf.getText(), 1, 100) && Character.isUpperCase(Main.mestoRodjDataTf.getText().charAt(0))) || isNull(Main.mestoRodjDataTf.getText()))
 				{
 					dosije.mesto_rodjenja = Main.mestoRodjDataTf.getText();
 					return true;
 				}
 				return false;
 			case "država rođenja: ":
-				if(isSizeCorrect(Main.drzavaRodjDataTf.getText(), 1, 100) || isNull(Main.drzavaRodjDataTf.getText()))
+				if((isSizeCorrect(Main.drzavaRodjDataTf.getText(), 1, 100) && Character.isUpperCase(Main.drzavaRodjDataTf.getText().charAt(0))) || isNull(Main.drzavaRodjDataTf.getText()))
 				{
 					dosije.drzava_rodjenja = Main.drzavaRodjDataTf.getText();
 					return true;
 				}
 				return false;
 			case "ime oca: ":
-				if(isSizeCorrect(Main.imeOcaDataTf.getText(), 1, 50) || isNull(Main.imeOcaDataTf.getText()))
+				if((isSizeCorrect(Main.imeOcaDataTf.getText(), 1, 50) && Character.isUpperCase(Main.imeOcaDataTf.getText().charAt(0))) || isNull(Main.imeOcaDataTf.getText()))
 				{
 					dosije.ime_oca = Main.imeOcaDataTf.getText();
 					return true;
 				}
 				return false;
 			case "ime majke: ":
-				if(isSizeCorrect(Main.imeMajkeDataTf.getText(), 1, 50) || isNull(Main.imeMajkeDataTf.getText()))
+				if((isSizeCorrect(Main.imeMajkeDataTf.getText(), 1, 50) && Character.isUpperCase(Main.imeMajkeDataTf.getText().charAt(0))) || isNull(Main.imeMajkeDataTf.getText()))
 				{
 					dosije.ime_majke = Main.imeMajkeDataTf.getText();
 					return true;
@@ -86,7 +88,7 @@ public class DataValidator {
 				}
 				return false;
 			case "mesto stanovanja: ":
-				if(isSizeCorrect(Main.mestoStanDataTf.getText(), 1, 100) || isNull(Main.mestoStanDataTf.getText()))
+				if((isSizeCorrect(Main.mestoStanDataTf.getText(), 1, 100) && Character.isUpperCase(Main.mestoStanDataTf.getText().charAt(0))) || isNull(Main.mestoStanDataTf.getText()))
 				{
 					dosije.mesto_stanovanja = Main.mestoStanDataTf.getText();
 					return true;
@@ -100,21 +102,21 @@ public class DataValidator {
 				}
 				return false;
 			case "država stanovanja: ":
-				if(isSizeCorrect(Main.drzavaStanDataTf.getText(), 1, 100) || isNull(Main.drzavaStanDataTf.getText()))
+				if((isSizeCorrect(Main.drzavaStanDataTf.getText(), 1, 100) && Character.isUpperCase(Main.drzavaStanDataTf.getText().charAt(0))) || isNull(Main.drzavaStanDataTf.getText()))
 				{
 					dosije.drzava_stanovanja = Main.drzavaStanDataTf.getText();
 					return true;
 				}
 				return false;
 			case "telefon: ":
-				if(isSizeCorrect(Main.telefonDataTf.getText(), 1, 25) || isNull(Main.telefonDataTf.getText()))
+				if((isSizeCorrect(Main.telefonDataTf.getText(), 1, 25) && isValidNumber(Main.telefonDataTf.getText())) || isNull(Main.telefonDataTf.getText()))
 				{
 					dosije.telefon = Main.telefonDataTf.getText();
 					return true;
 				}
 				return false;
 			case "mobilni telefon: ":
-				if(isSizeCorrect(Main.mobilniDataTf.getText(), 1, 25) || isNull(Main.mobilniDataTf.getText()))
+				if((isSizeCorrect(Main.mobilniDataTf.getText(), 1, 25) && isValidNumber(Main.mobilniDataTf.getText())) || isNull(Main.mobilniDataTf.getText()))
 				{
 					dosije.mobilni_telefon = Main.mobilniDataTf.getText();
 					return true;
@@ -179,5 +181,10 @@ public class DataValidator {
         } catch (ParseException e) {
             return false;
         }
+	}
+	
+	public static boolean isValidNumber(String data)
+	{
+		return data.matches("[0-9]+[/-][0-9]+-[0-9]+");
 	}
 }
